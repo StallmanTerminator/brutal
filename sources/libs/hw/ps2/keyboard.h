@@ -3,7 +3,7 @@
 #include <hw/ps2/controller.h>
 #include "brutal/ui/event.h"
 
-typedef void (*Ps2KeyboardCallback)(UiKeyboardEvent ev, void *context);
+typedef void (*Ps2KeyboardCallback)(UiEvent ev, void *context);
 
 typedef struct
 {

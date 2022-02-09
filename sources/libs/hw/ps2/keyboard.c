@@ -13,11 +13,14 @@ void ps2_keyboard_handle_code(Ps2Keyboard *ps2, uint8_t packet)
     {
         ps2->kb_escaped = false;
         KbKey key = (KbKey)((packet & 0x7f) + 0x80);
-        ps2->callback((UiKeyboardEvent){
-                          .key = key,
-                          .modifiers = packet & 0x80 ? KBMOTION_UP : KBMOTION_DOWN,
-                      },
-                      ps2->ctx);
+        UiEvent ev = {
+            .keyboard = {
+                .key = key,
+            },
+            .type = packet & 0x80 ? UI_EVENT_KEYBOARD_DOWN : UI_EVENT_KEYBOARD_UP,
+        };
+
+        ps2->callback(ev, ps2->ctx);
     }
     else if (packet == PS2_KEYBOARD_ESCAPED)
     {
@@ -26,11 +29,15 @@ void ps2_keyboard_handle_code(Ps2Keyboard *ps2, uint8_t packet)
     else
     {
         KbKey key = (KbKey)((packet & 0x7f));
-        ps2->callback((UiKeyboardEvent){
-                          .key = key,
-                          .modifiers = packet & 0x80 ? KBMOTION_UP : KBMOTION_DOWN,
-                      },
-                      ps2->ctx);
+
+        UiEvent ev = {
+            .keyboard = {
+                .key = key,
+            },
+            .type = packet & 0x80 ? UI_EVENT_KEYBOARD_DOWN : UI_EVENT_KEYBOARD_UP,
+        };
+
+        ps2->callback(ev, ps2->ctx);
     }
 }
 
